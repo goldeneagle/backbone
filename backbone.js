@@ -17,6 +17,7 @@
 
   // The top-level namespace. All public Backbone classes and modules will
   // be attached to this. Exported for both CommonJS and the browser.
+  /** @namespace Backbone */
   var Backbone;
   if (typeof exports !== 'undefined') {
     Backbone = exports;
@@ -64,7 +65,7 @@
   //     object.bind('expand', function(){ alert('expanded'); });
   //     object.trigger('expand');
   //
-  Backbone.Events = {
+Backbone.Events = {
 
     // Bind an event, specified by a string name, `ev`, to a `callback` function.
     // Passing `"all"` will bind the callback to all events fired.
@@ -127,8 +128,16 @@
   // Backbone.Model
   // --------------
 
-  // Create a new model, with defined attributes. A client id (`cid`)
-  // is automatically generated and assigned for you.
+  /**
+   *Create a new model, with defined attributes. A client id (`cid`)
+   * is automatically generated and assigned for you.
+   *
+   * @name Backbone.Model
+   * @class
+   * @borrows extend as this#extend
+   * @param {object} attributes
+   * @param {object} options
+   **/
   Backbone.Model = function(attributes, options) {
     var defaults;
     attributes || (attributes = {});
@@ -147,7 +156,8 @@
   };
 
   // Attach all inheritable methods to the Model prototype.
-  _.extend(Backbone.Model.prototype, Backbone.Events, {
+  _.extend(Backbone.Model.prototype, /** @lends Backbone.Model **/ Backbone.Events,
+      /** @lends Backbone.Model **/ {
 
     // A snapshot of the model's previous attributes, taken immediately
     // after the last `"change"` event was fired.
@@ -411,9 +421,16 @@
   // Backbone.Collection
   // -------------------
 
-  // Provides a standard collection class for our sets of models, ordered
-  // or unordered. If a `comparator` is specified, the Collection will maintain
-  // its models in sort order, as they're added and removed.
+  /**
+   * Provides a standard collection class for our sets of models, ordered
+   * or unordered. If a `comparator` is specified, the Collection will maintain
+   * its models in sort order, as they're added and removed.
+   *
+   * @name Backbone.Collection
+   * @constructor
+   * @borrows extend as this.extend
+   * @param options
+   */
   Backbone.Collection = function(models, options) {
     options || (options = {});
     if (options.comparator) this.comparator = options.comparator;
@@ -424,7 +441,8 @@
   };
 
   // Define the Collection's inheritable methods.
-  _.extend(Backbone.Collection.prototype, Backbone.Events, {
+  _.extend(Backbone.Collection.prototype, /** @lends Backbone.Collection **/ Backbone.Events,
+      /** @lends Backbone.Collection **/ {
 
     // The default model for a collection is just a **Backbone.Model**.
     // This should be overridden in most cases.
@@ -653,8 +671,15 @@
   // Backbone.Router
   // -------------------
 
-  // Routers map faux-URLs to actions, and fire events when routes are
-  // matched. Creating a new one sets its `routes` hash, if not set statically.
+  /**
+   * Routers map faux-URLs to actions, and fire events when routes are
+   * matched. Creating a new one sets its `routes` hash, if not set statically.
+   *
+   * @name Backbone.Router
+   * @constructor
+   * @borrows extend as this.extend
+   * @param options
+   */
   Backbone.Router = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
@@ -669,7 +694,8 @@
   var escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g;
 
   // Set up all inheritable **Backbone.Router** properties and methods.
-  _.extend(Backbone.Router.prototype, Backbone.Events, {
+  _.extend(Backbone.Router.prototype, /** @lends Backbone.Router# **/ Backbone.Events,
+      /** @lends Backbone.Router **/ {
 
     // Initialize is an empty function by default. Override it with your own
     // initialization logic.
@@ -730,8 +756,14 @@
   // Backbone.History
   // ----------------
 
-  // Handles cross-browser history management, based on URL fragments. If the
-  // browser does not support `onhashchange`, falls back to polling.
+  /**
+   * Handles cross-browser history management, based on URL fragments. If the
+   * browser does not support `onhashchange`, falls back to polling.
+   *
+   * @name Backbone.History
+   * @constructor
+   * @borrows extend as this.extend
+   */
   Backbone.History = function() {
     this.handlers = [];
     _.bindAll(this, 'checkUrl');
@@ -747,7 +779,7 @@
   var historyStarted = false;
 
   // Set up all inheritable **Backbone.History** properties and methods.
-  _.extend(Backbone.History.prototype, {
+  _.extend(Backbone.History.prototype, /** @lends Backbone.History# **/ {
 
     // The default interval to poll for hash changes, if necessary, is
     // twenty times a second.
@@ -874,8 +906,15 @@
   // Backbone.View
   // -------------
 
-  // Creating a Backbone.View creates its initial element outside of the DOM,
-  // if an existing element is not provided...
+  /**
+   * Creating a Backbone.View creates its initial element outside of the DOM,
+   * if an existing element is not provided...
+   *
+   * @name Backbone.View
+   * @constructor
+   * @borrows extend as this.extend
+   * @param options
+   */
   Backbone.View = function(options) {
     this.cid = _.uniqueId('view');
     this._configure(options || {});
@@ -898,7 +937,8 @@
   var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName'];
 
   // Set up all inheritable **Backbone.View** properties and methods.
-  _.extend(Backbone.View.prototype, Backbone.Events, {
+  _.extend(Backbone.View.prototype, /** @lends Backbone.View **/ Backbone.Events,
+      /** @lends Backbone.View **/ {
 
     // The default `tagName` of a View's element is `"div"`.
     tagName : 'div',
@@ -1017,24 +1057,32 @@
     'read'  : 'GET'
   };
 
-  // Backbone.sync
-  // -------------
 
-  // Override this function to change the manner in which Backbone persists
-  // models to the server. You will be passed the type of request, and the
-  // model in question. By default, uses makes a RESTful Ajax request
-  // to the model's `url()`. Some possible customizations could be:
-  //
-  // * Use `setTimeout` to batch rapid-fire updates into a single request.
-  // * Send up the models as XML instead of JSON.
-  // * Persist models via WebSockets instead of Ajax.
-  //
-  // Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
-  // as `POST`, with a `_method` parameter containing the true HTTP method,
-  // as well as all requests with the body as `application/x-www-form-urlencoded` instead of
-  // `application/json` with the model in a param named `model`.
-  // Useful when interfacing with server-side languages like **PHP** that make
-  // it difficult to read the body of `PUT` requests.
+  /**
+   * Backbone.sync
+   * -------------
+   * Override this function to change the manner in which Backbone persists
+   * models to the server. You will be passed the type of request, and the
+   * model in question. By default, uses makes a RESTful Ajax request
+   * to the model's `url()`. Some possible customizations could be:
+   *
+   * * Use `setTimeout` to batch rapid-fire updates into a single request.
+   * * Send up the models as XML instead of JSON.
+   * * Persist models via WebSockets instead of Ajax.
+   *
+   * Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
+   * as `POST`, with a `_method` parameter containing the true HTTP method,
+   * as well as all requests with the body as `application/x-www-form-urlencoded` instead of
+   * `application/json` with the model in a param named `model`.
+   * Useful when interfacing with server-side languages like **PHP** that make
+   * it difficult to read the body of `PUT` requests.   * @name Backbone.sync
+   *
+   * @name Backbone.sync
+   * @class
+   * @param method
+   * @param model
+   * @param options
+   */
   Backbone.sync = function(method, model, options) {
     var type = methodMap[method];
 
