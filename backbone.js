@@ -133,7 +133,7 @@ Backbone.Events = {
    * is automatically generated and assigned for you.
    *
    * @name Backbone.Model
-   * @class
+   * @class Backbone.Model
    * @borrows extend as this#extend
    * @param {object} attributes
    * @param {object} options
@@ -1085,7 +1085,7 @@ Backbone.Events = {
    * it difficult to read the body of `PUT` requests.   * @name Backbone.sync
    *
    * @name Backbone.sync
-   * @class
+   * @class Backbone.sync
    * @param method
    * @param model
    * @param options
