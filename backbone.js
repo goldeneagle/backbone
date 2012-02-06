@@ -156,8 +156,9 @@ Backbone.Events = {
   };
 
   // Attach all inheritable methods to the Model prototype.
-  _.extend(Backbone.Model.prototype, /** @lends Backbone.Model **/ Backbone.Events,
-      /** @lends Backbone.Model **/ {
+  _.extend(Backbone.Model.prototype,
+  /** @lends Backbone.Model **/ Backbone.Events,
+  /** @lends Backbone.Model **/ {
 
     // A snapshot of the model's previous attributes, taken immediately
     // after the last `"change"` event was fired.
@@ -200,6 +201,12 @@ Backbone.Events = {
 
     // Set a hash of model attributes on the object, firing `"change"` unless you
     // choose to silence it.
+    /**
+     * Set a model's attributes
+     *
+     * @param {object} attrs
+     * @param {object} options can be silent, validation options
+     */
     set : function(attrs, options) {
 
       // Extract attributes and options.
