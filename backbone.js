@@ -83,10 +83,21 @@
   //     object.on('expand', function(){ alert('expanded'); });
   //     object.trigger('expand');
   //
+  /**
+   * @name Backbone.Events
+   * @type {Object}
+   */
   var Events = Backbone.Events = {
 
     // Bind one or more space separated events, `events`, to a `callback`
     // function. Passing `"all"` will bind the callback to all events fired.
+    /** @name Backbone.Events.on
+     * @function
+     * @param events
+     * @param callback
+     * @param context
+     * @return {number}
+     * */
     on: function(events, callback, context) {
 
       var calls, event, node, tail, list;
@@ -112,6 +123,7 @@
     // Remove one or many callbacks. If `context` is null, removes all callbacks
     // with that function. If `callback` is null, removes all callbacks for the
     // event. If `events` is null, removes all bound callbacks for all events.
+    /** @name Backbone.Events.off */
     off: function(events, callback, context) {
       var event, calls, node, tail, cb, ctx;
 
@@ -147,6 +159,7 @@
     // passed the same arguments as `trigger` is, apart from the event name
     // (unless you're listening on `"all"`, which will cause your callback to
     // receive the true name of the event as the first argument).
+    /** @name Backbone.Events.trigger */
     trigger: function(events) {
       var event, node, calls, tail, args, all, rest;
       if (!(calls = this._callbacks)) return this;
@@ -177,8 +190,11 @@
 
   };
 
+
   // Aliases for backwards compatibility.
+  /** @name Backbone.Events.bind */
   Events.bind   = Events.on;
+  /** @name Backbone.Event.unbind */
   Events.unbind = Events.off;
 
   // Backbone.Model
@@ -186,6 +202,11 @@
 
   // Create a new model, with defined attributes. A client id (`cid`)
   // is automatically generated and assigned for you.
+  /**
+   *
+   * @class Backbone.Model
+   * @extends Backbone.Events
+   */
   var Model = Backbone.Model = function(attributes, options) {
     var defaults;
     attributes || (attributes = {});
@@ -210,7 +231,9 @@
   };
 
   // Attach all inheritable methods to the Model prototype.
-  _.extend(Model.prototype, Events, {
+  _.extend(Model.prototype, Events,
+  /** @lends Backbone.Model */
+  {
 
     // A hash of attributes whose current and previous value differ.
     changed: null,
@@ -556,6 +579,10 @@
   // Provides a standard collection class for our sets of models, ordered
   // or unordered. If a `comparator` is specified, the Collection will maintain
   // its models in sort order, as they're added and removed.
+  /**
+   * @class Backbone.Collection
+   * @extends Backbone.Events
+   */
   var Collection = Backbone.Collection = function(models, options) {
     options || (options = {});
     if (options.model) this.model = options.model;
@@ -566,8 +593,10 @@
   };
 
   // Define the Collection's inheritable methods.
-  _.extend(Collection.prototype, Events, {
-
+  _.extend(Collection.prototype,
+  Events,
+  /** @lends Backbone.Collection */
+  {
     // The default model for a collection is just a **Backbone.Model**.
     // This should be overridden in most cases.
     model: Model,
