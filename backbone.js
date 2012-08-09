@@ -1184,7 +1184,8 @@
   var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName'];
 
   // Set up all inheritable **Backbone.View** properties and methods.
-  _.extend(View.prototype, Events, {
+  _.extend(View.prototype, Events,
+  /** @lends Backbone.View */ {
 
     // The default `tagName` of a View's element is `"div"`.
     tagName: 'div',
