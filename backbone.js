@@ -231,7 +231,9 @@
   };
 
   // Attach all inheritable methods to the Model prototype.
-  _.extend(Model.prototype, Events,
+  _.extend(Model.prototype,
+  /** @lends Backbone.Model */
+  Events,
   /** @lends Backbone.Model */
   {
 
@@ -594,6 +596,7 @@
 
   // Define the Collection's inheritable methods.
   _.extend(Collection.prototype,
+  /** @lends Backbone.Collection */
   Events,
   /** @lends Backbone.Collection */
   {
@@ -894,6 +897,9 @@
 
   // Routers map faux-URLs to actions, and fire events when routes are
   // matched. Creating a new one sets its `routes` hash, if not set statically.
+  /**
+   * @class Backbone.Router
+   */
   var Router = Backbone.Router = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
@@ -908,7 +914,11 @@
   var escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g;
 
   // Set up all inheritable **Backbone.Router** properties and methods.
-  _.extend(Router.prototype, Events, {
+  _.extend(Router.prototype,
+  /** @lends Backbone.Router */
+  Events,
+  /** @lends Backbone.Router */
+  {
 
     // Initialize is an empty function by default. Override it with your own
     // initialization logic.
@@ -974,6 +984,9 @@
 
   // Handles cross-browser history management, based on URL fragments. If the
   // browser does not support `onhashchange`, falls back to polling.
+  /**
+   * @class Backbone.History
+   */
   var History = Backbone.History = function() {
     this.handlers = [];
     _.bindAll(this, 'checkUrl');
@@ -989,7 +1002,11 @@
   History.started = false;
 
   // Set up all inheritable **Backbone.History** properties and methods.
-  _.extend(History.prototype, Events, {
+  _.extend(History.prototype,
+  /** @lends Backbone.History */
+  Events,
+  /** @lends Backbone.History */
+  {
 
     // The default interval to poll for hash changes, if necessary, is
     // twenty times a second.
@@ -1169,6 +1186,9 @@
 
   // Creating a Backbone.View creates its initial element outside of the DOM,
   // if an existing element is not provided...
+  /**
+   * @class Backbone.View
+   */
   var View = Backbone.View = function(options) {
     this.cid = _.uniqueId('view');
     this._configure(options || {});
@@ -1184,8 +1204,11 @@
   var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName'];
 
   // Set up all inheritable **Backbone.View** properties and methods.
-  _.extend(View.prototype, Events,
-  /** @lends Backbone.View */ {
+  _.extend(View.prototype,
+  /** @lends Backbone.View */
+  Events,
+  /** @lends Backbone.View */
+  {
 
     // The default `tagName` of a View's element is `"div"`.
     tagName: 'div',
