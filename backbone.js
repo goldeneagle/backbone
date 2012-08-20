@@ -931,6 +931,9 @@
     //     });
     //
     route: function(route, name, callback) {
+      /**
+       * @type {Backbone.History} Backbone.history
+       */
       Backbone.history || (Backbone.history = new History);
       if (!_.isRegExp(route)) route = this._routeToRegExp(route);
       if (!callback) callback = this[name];
